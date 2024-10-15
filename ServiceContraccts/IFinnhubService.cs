@@ -4,8 +4,8 @@
     public interface IFinnhubService
     {
 
-        //Dictionary<string,object>? GetCompanyProfile(string companyId);
-        Dictionary<string, object>? GetStockPriceQuote(string companyId);
+       public Task<Dictionary<string, object>?> GetCompanyProfile(string companyId);
+       public  Task<Dictionary<string, object>?> GetStockPriceQuote(string companyId);
 
     }
 }

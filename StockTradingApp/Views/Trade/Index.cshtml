@@ -3,15 +3,28 @@
 @{
 	ViewBag.Title = "Home";
 }
-
-<div class="box trading-panel">
-	<div class="flex trading-panel-flex">
-		<div id="stock-price-panel">
-			<div class="stock">
-				<h1 class="stock-title">@Model.StockSymbol</h1>
-
+<form method="post">
+	<div class="box trading-panel">
+		<div class="flex trading-panel-flex">
+			<div id="stock-price-panel">
+				<div class="stock flex">
+					<h3 class="stock-title-small">@Model.stockName <span> </span> (@Model.StockSymbol)</h3>
+				</div>
+				<div>
+					<h2> <i class="fa-solid fa-dollar-sign" style="color:grey"></i> <spam id="price">@Model.CurrentPrice</spam></h2>
+				</div>
 			</div>
 		</div>
 	</div>
+	<input type="hidden" name="StockSymbol" id="StockSymbol" value="@Model.StockSymbol"/>
+	<input type="hidden" name="FinnhubToken"  value="@ViewBag.FinnhubToken" />
+</form>
 
-</div>
+@section scripts{
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/my_script.js"></script>
+	<script src ="~/Scripts//FinnhubScript.js">
+		</script>
+
+
+}
