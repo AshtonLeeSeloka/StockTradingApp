@@ -26,10 +26,20 @@ namespace StockTradingApp.Controllers
 		//since methode is asynchronus add async and Type is Task<>
 		public async Task<IActionResult> Index(string? Ticker)
 		{
+			Dictionary<string, object>? responseDictionary = new Dictionary<string, object>();
+			Dictionary<string, object>? CompanyProfile = new Dictionary<string, object>();
 
-			//Dictionary<string, object>? responseDictionary = await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
-			Dictionary<string, object>? responseDictionary = await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
-			Dictionary<string, object>? CompanyProfile = await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
+			if (Ticker == null) 
+			{
+				responseDictionary = await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
+				CompanyProfile = await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
+			}
+			else 
+			{
+				responseDictionary = await _finnhubService.GetStockPriceQuote(Ticker);
+				CompanyProfile = await _finnhubService.GetCompanyProfile(Ticker);
+			}
+		
 			Stock stock = new Stock()
 			{
 				stockName = CompanyProfile["name"].ToString(),
@@ -42,8 +52,6 @@ namespace StockTradingApp.Controllers
 
 			ViewBag.FinnhubToken = _configuration["FinHubApi"];
 			return View(stock);
-
-
 		}
 	}
 }
