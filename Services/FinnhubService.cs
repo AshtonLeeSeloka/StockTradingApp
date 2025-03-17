@@ -7,8 +7,6 @@ namespace Services
     public class FinnhubService : IFinnhubService
     {
 
-        
-
         private readonly IHttpClientFactory _httpClientFactory;
 		private readonly IConfiguration _configuration;
 
@@ -31,33 +29,25 @@ namespace Services
                 };
 
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync( httpRequestMessage );
-
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
-
                 StreamReader streamReader = new StreamReader( stream );
-
                 string response = streamReader.ReadToEnd();
-
                 Dictionary<string,Object>? responseDictionary = JsonSerializer.Deserialize<Dictionary<string,Object>>(response);
 
 				if (responseDictionary == null)
 				{
 					throw new InvalidOperationException("No Response from finhubb service");
-
 				}
 
 				//If Error throw Exception
 				if (responseDictionary.ContainsKey("error"))
 				{
 					throw new InvalidOperationException(Convert.ToString(responseDictionary["Error"]));
-
 				}
+
 				return responseDictionary;
 			}
-	
 		}
-
-
 
 		//using acync
 		public async Task<Dictionary< string,object>?> GetStockPriceQuote(string companyId)
@@ -67,13 +57,13 @@ namespace Services
             {
                 //To handle Request messages HttpRequest is used
                 HttpRequestMessage httpRequestMessage = new HttpRequestMessage()
-                { RequestUri = new Uri($"https://finnhub.io/api/v1/quote?symbol={companyId}&token={_configuration["FinHubApi"]}"),
-                Method = HttpMethod.Get
-
+                { 
+                    RequestUri = new Uri($"https://finnhub.io/api/v1/quote?symbol={companyId}&token={_configuration["FinHubApi"]}"),
+                    Method = HttpMethod.Get
                 };
 
                 //because calling an asynchronus methode use await
-               HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
                 //to read response body 
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
@@ -91,22 +81,17 @@ namespace Services
                 if (responseDictionary == null) 
                 {
                     throw new InvalidOperationException("No Response from finhubb service");
-                
                 }
 
 				//If Error throw Exception
 				if (responseDictionary.ContainsKey("error"))
 				{
 					throw new InvalidOperationException(Convert.ToString(responseDictionary["Error"]));
-
 				}
+
 				return responseDictionary;
 
             }
- 
         }
-
-
-
 	}
 }
